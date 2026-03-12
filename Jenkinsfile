@@ -1,21 +1,17 @@
 pipeline {
   agent any
 
-  options {
-    ansiColor('xterm')
-  }
-
   stages {
 
     stage('Build') {
       steps {
-        sh 'mvn -Dstyle.color=always clean install'
+        sh 'mvn -B clean install'
       }
     }
 
     stage('Test') {
       steps {
-        sh 'mvn -Dstyle.color=always test'
+        sh 'mvn -B test'
       }
     }
   }
