@@ -1,6 +1,8 @@
 pipeline {
   agent any
-
+  tools {
+  maven 'Maven_3.9.13' // name must match what's configured in Global Tool Config
+  }
   environment{
     GIT_TOKEN = '12345'
     DOCKER_SECRET= credentials('dockerhub-credentials')
@@ -22,10 +24,11 @@ pipeline {
         }
       }
       steps {
-      withCredentials(){
-
-      }
-        sh 'mvn -B test'
+      withCredentials([usernamePassword(credentials: 'dummyCredential', userNameVariable: USER, passwordVariable: PASS)]) {
+            sh "Some Script ${USER} ${PASS}"
+            sh 'mvn -B test'
+            // SECRET_VAR is only available inside this block
+          }
       }
     }
   }
