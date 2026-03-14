@@ -24,7 +24,6 @@ pipeline {
 
     stage('Test') {
       steps {
-        echo "Branch is: ${env.GIT_BRANCH}"
         withCredentials([usernamePassword(credentialsId: 'dummyCredential', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
           sh "Some Script ${USER} ${PASS}"
           sh 'mvn -B test'
