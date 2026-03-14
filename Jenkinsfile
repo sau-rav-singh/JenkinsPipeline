@@ -23,20 +23,20 @@ pipeline {
     }
 
     stage('Test') {
-      when {
-        expression {
-          GIT_BRANCH == 'main' || GIT_BRANCH == 'master'
-        }
-      }
-      steps {
-      withCredentials([usernamePassword(credentials: 'dummyCredential', userNameVariable: USER, passwordVariable: PASS)]) {
-            sh "Some Script ${USER} ${PASS}"
-            sh 'mvn -B test'
-            echo "Test Running in ${params.TARGET_ENV}"
+          when {
+            expression {
+              return env.GIT_BRANCH == 'main' || env.GIT_BRANCH == 'master'
+            }
           }
-      }
-    }
-  }
+          steps {
+            echo "Branch is: ${env.GIT_BRANCH}" // Moved inside steps
+            withCredentials([usernamePassword(credentialsId: 'dummyCredential', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                sh "Some Script ${USER} ${PASS}"
+                sh 'mvn -B test'
+                echo "Test Running in ${params.TARGET_ENV}"
+            }
+          }
+        }
 
   post {
 
