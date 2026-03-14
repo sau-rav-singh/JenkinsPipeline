@@ -45,6 +45,7 @@ pipeline {
     }
     stage("deploy") {
       when {
+        beforeInput true
         expression {
           params.DEPLOY == true
         }
