@@ -23,11 +23,6 @@ pipeline {
     }
 
     stage('Test') {
-      when {
-        expression {
-          return env.GIT_BRANCH == 'main' || env.GIT_BRANCH == 'master'
-        }
-      }
       steps {
         echo "Branch is: ${env.GIT_BRANCH}"
         withCredentials([usernamePassword(credentialsId: 'dummyCredential', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
