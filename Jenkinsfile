@@ -3,6 +3,11 @@ pipeline {
   tools {
   maven 'Maven_3.9.13' // name must match what's configured in Global Tool Config
   }
+  parameters {
+      string(name: 'TARGET_ENV', defaultValue: 'staging', description: 'Deploy target')
+      booleanParam(name: 'RUN_SMOKE', defaultValue: true, description: 'Run smoke tests?')
+      choice(name: 'BROWSER', choices: ['chrome', 'firefox', 'edge'], description: 'Browser')
+    }
   environment{
     GIT_TOKEN = '12345'
     DOCKER_SECRET= credentials('dockerhub-credentials')
@@ -27,7 +32,7 @@ pipeline {
       withCredentials([usernamePassword(credentials: 'dummyCredential', userNameVariable: USER, passwordVariable: PASS)]) {
             sh "Some Script ${USER} ${PASS}"
             sh 'mvn -B test'
-            // SECRET_VAR is only available inside this block
+            echo "Test Running in ${params.TARGET_ENV}"
           }
       }
     }
