@@ -45,6 +45,7 @@ pipeline {
     }
     stage("deploy") {
       when {
+        branch 'main'
         beforeInput true
         expression {params.DEPLOY}
       }
