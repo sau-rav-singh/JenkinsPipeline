@@ -1,3 +1,4 @@
+def gv
 pipeline {
   agent any
   tools {
@@ -13,13 +14,21 @@ pipeline {
     DOCKER_SECRET = credentials('dockerhub-credentials')
   }
   stages {
-    stage('Build') {
-      steps {
-        sh 'mvn -B clean install'
-        echo "Git Token is ${GIT_TOKEN}"
-        echo "Docker Secret is ${DOCKER_SECRET}"
-      }
-    }
+  stage("init") {
+              steps {
+                  script {
+                      gv = load "script.groovy"
+                  }
+              }
+          }
+    stage("build") {
+                steps {
+                    script {
+                        gv.build()
+                    }
+                }
+            }
+
     stage('Test') {
     when {
             expression { params.RUN_SMOKE == true }
