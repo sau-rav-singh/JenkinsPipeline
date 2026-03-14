@@ -14,25 +14,26 @@ pipeline {
     DOCKER_SECRET = credentials('dockerhub-credentials')
   }
   stages {
-  stage("init") {
-              steps {
-                  script {
-                      gv = load "script.groovy"
-                  }
-              }
-          }
-    stage("build") {
-                steps {
-                    script {
-                        gv.build()
-                    }
-                }
-            }
-
+    stage("Init") {
+      steps {
+        script {
+          gv = load "script.groovy"
+        }
+      }
+    }
+    stage("Build") {
+      steps {
+        script {
+          gv.build()
+        }
+      }
+    }
     stage('Test') {
-    when {
-            expression { params.RUN_SMOKE == true }
-          }
+      when {
+        expression {
+          params.RUN_SMOKE == true
+        }
+      }
       steps {
         withCredentials([usernamePassword(credentialsId: 'dummyCredential', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
           echo "Some Script ${USER} ${PASS}"
