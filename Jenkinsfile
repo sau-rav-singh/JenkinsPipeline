@@ -13,7 +13,6 @@ pipeline {
     DOCKER_SECRET = credentials('dockerhub-credentials')
   }
   stages {
-
     stage('Build') {
       steps {
         sh 'mvn -B clean install'
@@ -21,8 +20,10 @@ pipeline {
         echo "Docker Secret is ${DOCKER_SECRET}"
       }
     }
-
     stage('Test') {
+    when {
+            expression { params.RUN_SMOKE == true }
+          }
       steps {
         withCredentials([usernamePassword(credentialsId: 'dummyCredential', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
           echo "Some Script ${USER} ${PASS}"
@@ -32,7 +33,6 @@ pipeline {
       }
     }
   }
-
   post {
     always {
       junit '**/target/surefire-reports/*.xml'
@@ -44,5 +44,4 @@ pipeline {
       echo 'Build failed. Check the logs for more information.'
     }
   }
-
-}                              // <-- pipeline closing brace
+}
