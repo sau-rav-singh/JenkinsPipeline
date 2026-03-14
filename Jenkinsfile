@@ -18,10 +18,13 @@ pipeline {
     stage('Test') {
       when {
         expression {
-          BRANCH_NAME == 'main' || BRANCH_NAME == 'master'
+          GIT_BRANCH == 'main' || GIT_BRANCH == 'master'
         }
       }
       steps {
+      withCredentials(){
+
+      }
         sh 'mvn -B test'
       }
     }
