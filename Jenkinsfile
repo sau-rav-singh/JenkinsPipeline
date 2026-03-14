@@ -25,14 +25,13 @@ pipeline {
     stage('Test') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'dummyCredential', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-          sh "Some Script ${USER} ${PASS}"
+          echo "Some Script ${USER} ${PASS}"
           sh 'mvn -B test'
           echo "Test Running in ${params.TARGET_ENV}"
         }
       }
-    }                          // <-- stage('Test') closing brace
-
-  }                            // <-- stages closing brace
+    }
+  }
 
   post {
     always {
