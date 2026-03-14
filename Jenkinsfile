@@ -46,9 +46,7 @@ pipeline {
     stage("deploy") {
       when {
         beforeInput true
-        expression {
-          params.DEPLOY == true
-        }
+        expression {params.DEPLOY}
       }
       input {
         message "Select the environment to deploy to"
@@ -59,7 +57,9 @@ pipeline {
       }
       steps {
         script {
+        env.ENV_ONE = input message: "Select the environment to deploy to", ok: "Done", parameters: [choice(name: 'ONE', choices: ['dev', 'staging', 'prod'], description: '')]
           echo "Deploying to ${ENV}"
+          echo "Deploying to ${ENV_ONE}"
         }
       }
     }
